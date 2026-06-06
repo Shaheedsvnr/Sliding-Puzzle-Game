@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+    <defs>
+        <linearGradient id="lakeSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#bae6fd" />
+            <stop offset="100%" stop-color="#7dd3fc" />
+        </linearGradient>
+        <linearGradient id="lakeWater" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#0ea5e9" />
+        </linearGradient>
+    </defs>
+    <rect width="400" height="400" fill="url(#lakeSky)" />
+    <circle cx="320" cy="100" r="42" fill="#fef3c7" />
+    <ellipse cx="200" cy="320" rx="220" ry="90" fill="url(#lakeWater)" />
+    <path d="M30 300 Q100 240 200 290 T370 300 L400 400 L0 400 Z" fill="#bfdbfe" opacity="0.55" />
+</svg>

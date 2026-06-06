@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+    <defs>
+        <linearGradient id="sunriseSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fef3c7" />
+            <stop offset="100%" stop-color="#fb7185" />
+        </linearGradient>
+    </defs>
+    <rect width="400" height="400" fill="url(#sunriseSky)" />
+    <circle cx="200" cy="170" r="70" fill="#fb923c" opacity="0.95" />
+    <path d="M0 280 C100 180 180 260 240 200 C320 120 400 230 400 280 L400 400 L0 400 Z"
+        fill="#fde68a" />
+</svg>

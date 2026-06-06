@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Tile } from './Tile'
+import clickSound from '../assets/click.wav'
+import victorySound from '../assets/victory.wav'
 import forestImage from '../assets/nature-forest.jpg'
 import lakeImage from '../assets/nature-lake.jpg'
 import hillsImage from '../assets/nature-hills.jpg'
@@ -25,6 +27,16 @@ const IMAGE_OPTIONS: ImageOption[] = [
 
 function createSolvedTiles(size: number) {
   return Array.from({ length: size * size }, (_, index) => (index === size * size - 1 ? 0 : index + 1))
+}
+
+function getRandomImageId(currentId: string) {
+  const available = IMAGE_OPTIONS.filter((option) => option.id !== currentId)
+  return available[Math.floor(Math.random() * available.length)].id
+}
+
+function getRandomSize(currentSize: number) {
+  const available = [3, 4, 5].filter((size) => size !== currentSize)
+  return available[Math.floor(Math.random() * available.length)]
 }
 
 function getAdjacentIndices(index: number, size: number) {
@@ -62,16 +74,6 @@ function shuffleTiles(tiles: number[], size: number) {
   return nextTiles
 }
 
-function getRandomImageId(currentId: string) {
-  const otherImages = IMAGE_OPTIONS.filter((option) => option.id !== currentId)
-  return otherImages[Math.floor(Math.random() * otherImages.length)].id
-}
-
-function getRandomSize(currentSize: number) {
-  const sizes = [3, 4, 5].filter((size) => size !== currentSize)
-  return sizes[Math.floor(Math.random() * sizes.length)]
-}
-
 function getBackgroundStyle(value: number, size: number, image: string) {
   if (value === 0) {
     return {
@@ -105,6 +107,20 @@ export function SlidingPuzzle({ theme }: SlidingPuzzleProps) {
   const [tiles, setTiles] = useState<number[]>(createSolvedTiles(size))
   const [hasStarted, setHasStarted] = useState(false)
   const [showVictory, setShowVictory] = useState(false)
+  const [showHint, setShowHint] = useState(false)
+  const hintTimeoutRef = useRef<number | null>(null)
+
+  const clickAudio = useMemo(() => {
+    const audio = new Audio(clickSound)
+    audio.volume = 0.4
+    return audio
+  }, [])
+
+  const victoryAudio = useMemo(() => {
+    const audio = new Audio(victorySound)
+    audio.volume = 0.45
+    return audio
+  }, [])
 
   const image = IMAGE_OPTIONS.find((option) => option.id === imageId) ?? IMAGE_OPTIONS[0]
 
@@ -116,24 +132,43 @@ export function SlidingPuzzle({ theme }: SlidingPuzzleProps) {
 
   useEffect(() => {
     setShowVictory(false)
+    setShowHint(false)
     if (!hasStarted) {
       setTiles(createSolvedTiles(size))
+    }
+    return () => {
+      if (hintTimeoutRef.current !== null) {
+        window.clearTimeout(hintTimeoutRef.current)
+      }
     }
   }, [size, imageId, hasStarted])
 
   useEffect(() => {
     if (isSolved && hasStarted) {
+      victoryAudio.currentTime = 0
+      victoryAudio.play().catch(() => {})
       setShowVictory(true)
     }
-  }, [isSolved, hasStarted])
+  }, [isSolved, hasStarted, victoryAudio])
 
   const handleTileClick = (index: number) => {
     setHasStarted(true)
+    clickAudio.currentTime = 0
+    clickAudio.play().catch(() => {})
     setTiles((current) => moveTile(current, index, size))
+  }
+
+  const handleHint = () => {
+    setShowHint(true)
+    if (hintTimeoutRef.current !== null) {
+      window.clearTimeout(hintTimeoutRef.current)
+    }
+    hintTimeoutRef.current = window.setTimeout(() => setShowHint(false), 3800)
   }
 
   const handleShuffle = () => {
     setShowVictory(false)
+    setShowHint(false)
     setHasStarted(true)
     setTiles((current) => shuffleTiles(current, size))
   }
@@ -147,6 +182,7 @@ export function SlidingPuzzle({ theme }: SlidingPuzzleProps) {
     setSize(nextSize)
     setTiles(nextTiles)
     setShowVictory(false)
+    setShowHint(false)
     setHasStarted(true)
   }
 
@@ -175,13 +211,22 @@ export function SlidingPuzzle({ theme }: SlidingPuzzleProps) {
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:items-end">
-          <button
-            type="button"
-            onClick={handleShuffle}
-            className="inline-flex items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400 focus:outline-none focus:ring-4 focus:ring-sky-400/40"
-          >
-            Shuffle
-          </button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <button
+              type="button"
+              onClick={handleShuffle}
+              className="inline-flex items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400 focus:outline-none focus:ring-4 focus:ring-sky-400/40"
+            >
+              Shuffle
+            </button>
+            <button
+              type="button"
+              onClick={handleHint}
+              className="inline-flex items-center justify-center rounded-3xl bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-sky-400/40"
+            >
+              Hint
+            </button>
+          </div>
           <div className={`rounded-3xl px-4 py-3 text-sm ${panelClasses}`}>
             {isSolved ? 'Solved! Nice work.' : 'Click a tile next to the empty space to move it.'}
           </div>
@@ -206,6 +251,7 @@ export function SlidingPuzzle({ theme }: SlidingPuzzleProps) {
                 onClick={() => {
                   setSize(option)
                   setShowVictory(false)
+                  setShowHint(false)
                   setHasStarted(true)
                   setTiles(shuffleTiles(createSolvedTiles(option), option))
                 }}
@@ -270,6 +316,22 @@ export function SlidingPuzzle({ theme }: SlidingPuzzleProps) {
       </div>
 
       <AnimatePresence>
+        {showHint && (
+          <motion.div
+            className="fixed inset-x-0 top-6 z-40 flex justify-center px-4"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.25 }}
+          >
+            <div className="rounded-3xl border border-slate-300/10 bg-slate-950/95 px-5 py-3 text-sm text-slate-100 shadow-xl shadow-slate-950/40 backdrop-blur-md">
+              <p className="font-semibold text-sky-300">Hint ready</p>
+              <p className="mt-1 max-w-xl leading-6 text-slate-300">
+                Try solving the top-left region first and keep the empty tile near the area you want to shift. Small moves build the full picture.
+              </p>
+            </div>
+          </motion.div>
+        )}
         {showVictory && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 px-4 py-6"

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+    <defs>
+        <linearGradient id="forestSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c7d2fe" />
+            <stop offset="100%" stop-color="#7dd3fc" />
+        </linearGradient>
+        <linearGradient id="forestGreen" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#34d399" />
+            <stop offset="100%" stop-color="#166534" />
+        </linearGradient>
+    </defs>
+    <rect width="400" height="400" fill="url(#forestSky)" />
+    <circle cx="280" cy="100" r="48" fill="#fde68a" />
+    <path d="M0 260 C90 180 160 260 240 200 C320 140 380 240 400 260 L400 400 L0 400 Z"
+        fill="url(#forestGreen)" />
+    <path d="M40 330 C90 250 150 330 230 280 C290 250 340 320 400 300 L400 400 L0 400 Z"
+        fill="#4ade80" opacity="0.9" />
+</svg>

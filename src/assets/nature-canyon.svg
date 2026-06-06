@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+    <defs>
+        <linearGradient id="canyonSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fef3c7" />
+            <stop offset="100%" stop-color="#fb923c" />
+        </linearGradient>
+    </defs>
+    <rect width="400" height="400" fill="url(#canyonSky)" />
+    <path d="M0 220 Q90 160 180 240 T400 220 L400 400 L0 400 Z" fill="#c2410c" />
+    <path d="M0 300 Q120 240 200 300 T400 300 L400 400 L0 400 Z" fill="#ea580c" />
+    <path d="M0 340 Q130 280 220 340 T400 340 L400 400 L0 400 Z" fill="#fb923c" />
+</svg>

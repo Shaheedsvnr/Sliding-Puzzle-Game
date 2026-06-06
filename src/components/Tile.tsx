@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import type { CSSProperties, MouseEventHandler } from 'react'
 
 interface TileProps {
@@ -21,6 +22,11 @@ export function Tile({ value, isEmpty, isMovable, onClick, style, theme }: TileP
     'focus:ring-sky-400/40',
     'shadow-lg',
     'overflow-hidden',
+    'min-h-[96px]',
+    'grid',
+    'place-items-center',
+    'text-2xl',
+    'font-semibold',
   ]
 
   if (isEmpty) {
@@ -34,13 +40,19 @@ export function Tile({ value, isEmpty, isMovable, onClick, style, theme }: TileP
   }
 
   return (
-    <button
+    <motion.button
       type="button"
+      layout
+      transition={{ type: 'spring', stiffness: 250, damping: 22 }}
+      whileHover={isMovable ? { scale: 1.03 } : {}}
+      whileTap={isMovable ? { scale: 0.96 } : {}}
       onClick={onClick}
       disabled={!isMovable && !isEmpty}
       className={tileClasses.join(' ')}
       style={style}
       aria-label={isEmpty ? 'Empty tile' : `Tile ${value}`}
-    />
+    >
+      {!isEmpty && value}
+    </motion.button>
   )
 }
