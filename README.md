@@ -45,18 +45,6 @@ npm run build
 npm run preview
 ```
 
-## GitHub deployment
-
-This project is ready to push to GitHub.
-
-If you already have a remote repository, run:
-
-```bash
-git remote add origin <YOUR_GITHUB_REPO_URL>
-git branch -M main
-git push -u origin main
-```
-
 If you want to create the repository manually, use GitHub and then add the remote URL above.
 
 ## Notes
