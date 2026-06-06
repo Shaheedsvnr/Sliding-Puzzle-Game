@@ -2,6 +2,24 @@
 
 A React + TypeScript sliding puzzle game built with Vite and Tailwind CSS.
 
+
+## Live demo
+
+- https://sliding-puzzle-game-bice.vercel.app/
+
+## Technologies and concepts used
+
+- React 19 with functional components and hooks
+- TypeScript for type-safe component logic
+- Vite for fast development and optimized production builds
+- Tailwind CSS for utility-first styling and responsive layout
+- Framer Motion for animated tile motion and victory overlay
+- Audio feedback with browser `Audio` playback
+- Puzzle logic including shuffle, adjacency checks, and board state management
+- Theme support for light and dark modes
+- Infinite puzzle progression with random next challenge selection
+
+
 ## Features
 
 - Dynamic 3×3, 4×4, and 5×5 puzzle boards
@@ -11,13 +29,6 @@ A React + TypeScript sliding puzzle game built with Vite and Tailwind CSS.
 - Light and dark theme support
 - Animated victory overlay using Framer Motion
 - Infinite puzzle progression with randomized next challenges
-
-## Project structure
-
-- `src/App.tsx` — app entry and theme toggle
-- `src/components/SlidingPuzzle.tsx` — puzzle logic, board, preview, and victory overlay
-- `src/components/Tile.tsx` — tile component
-- `src/assets/` — nature images used for the puzzle tiles
 
 ## Getting started
 
@@ -31,18 +42,6 @@ npm install
 
 ```bash
 npm run dev
-```
-
-3. Build for production
-
-```bash
-npm run build
-```
-
-4. Preview the production build
-
-```bash
-npm run preview
 ```
 
 If you want to create the repository manually, use GitHub and then add the remote URL above.
